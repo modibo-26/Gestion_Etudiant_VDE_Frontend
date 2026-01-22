@@ -1,0 +1,6 @@
+@if (filiere$ | async; as filieres) {
+  <p class="text-sm text-gray-500 mb-4">{{ filieres.length }} filières</p>
+  @for (filiere of filieres; track filiere.id) {
+    <app-filiere [filiere]="filiere"></app-filiere>
+  }
+}

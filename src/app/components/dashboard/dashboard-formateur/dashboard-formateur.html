@@ -1,0 +1,32 @@
+<div class="flex gap-4 p-4">
+  <div class="flex-1">
+    <h2>Étudiants</h2>
+    <app-user-list />
+  </div>
+  <div class="flex-1">
+    <h2>Filières</h2>
+    <app-filiere-list />
+  </div>
+</div>
+
+<div class="p-4">
+  <h2 class="text-xl font-bold mb-4">Validations en attente</h2>
+  @if (validations$ | async; as validations) {
+    <div class="space-y-3">
+      @for (validation of validations; track validation.id) {
+        <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
+          <div>
+            <p class="font-semibold">{{ validation.user.prenom }} {{ validation.user.nom }}</p>
+            <p class="text-sm text-gray-500">{{ validation.user.code ?? 'Pas de code' }}</p>
+            <p class="text-blue-600">{{ validation.module.nom }}</p>
+            <p class="text-blue-600">{{ validation.user.filiere?.nom }}</p>
+          </div>
+          <div class="flex gap-2">
+            <button (click)="reponse(validation.id, 'TERMINE')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Accepter</button>
+            <button (click)="reponse(validation.id, 'EN_COURS')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Refuser</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

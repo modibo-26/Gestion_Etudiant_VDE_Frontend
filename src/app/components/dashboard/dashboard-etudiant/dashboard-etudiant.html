@@ -1,0 +1,14 @@
+@if (user$ | async; as user) {
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <div class="flex items-center gap-4">
+            <div class="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold">
+                {{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}
+            </div>
+            <div>
+                <h1 class="text-xl font-bold">{{ user.prenom }} {{ user.nom }}</h1>
+                <p class="text-gray-600">{{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+    <app-validation-board [userId]="user.id" [editable]="true" />
+}

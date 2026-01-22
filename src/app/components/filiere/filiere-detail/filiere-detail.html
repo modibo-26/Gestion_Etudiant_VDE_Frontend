@@ -1,0 +1,8 @@
+@if (filiere$ | async; as filiere) {
+    <p>{{ filiere.nom }}</p>
+    @if (users$ | async; as users) {
+        @for (user of users; track user.id) {
+             <app-user [user]="user"></app-user>
+        }
+    }
+}

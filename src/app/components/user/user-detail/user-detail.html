@@ -1,0 +1,29 @@
+@if (user$ | async; as user) {
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <div class="flex items-center gap-4">
+            <div class="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold">
+                {{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}
+            </div>
+            <div>
+                <h1 class="text-xl font-bold">{{ user.prenom }} {{ user.nom }}</h1>
+                <p class="text-gray-600">{{ user.email }}</p>
+                <p class="text-sm text-gray-400">{{ user.code ?? 'Pas de code' }} • {{ user.dateEntree ?? "Pas de date d'entree" }}</p>
+            </div>
+        </div>
+    </div>
+    @if (user.filiere) {
+        <app-validation-board [userId]="user.id" />
+    } @else {
+        <div>
+            <select #filiereSelect>
+                <option value="">Choisir une filière</option>
+                @for (f of filieres$ | async; track f.id) {
+                    <option [value]="f.id">{{ f.nom }}</option>
+                }
+            </select>
+            <button (click)="onAssignFiliere(user.id, +filiereSelect.value)">Attribuer</button>
+        </div>
+        
+    }
+}
+

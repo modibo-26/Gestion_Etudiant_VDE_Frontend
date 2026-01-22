@@ -1,0 +1,6 @@
+@if (users$ | async; as users) {
+  <p class="text-sm text-gray-500 mb-4">{{ users.length }} étudiants</p>
+  @for (user of users; track user.id) {
+      <app-user [user]="user"></app-user>
+    }
+}
