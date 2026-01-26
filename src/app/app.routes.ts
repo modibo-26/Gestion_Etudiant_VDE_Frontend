@@ -12,7 +12,7 @@ export const routes: Routes = [
   { path: 'admin', component: DashboardAdmin, canActivate: [authGuard], data: {roles: ['ADMIN']} },
   { path: 'etudiant', component: DashboardEtudiant, canActivate: [authGuard], data: {roles: ['ETUDIANT']} },
   { path: 'users/:id', component: UserDetail, canActivate: [authGuard], data: { roles: ['FORMATEUR'] } },
-  { path: 'filieres/:id', component: FiliereDetail, canActivate: [authGuard], data: { roles: ['FORMATEUR'] } },
+  { path: 'filieres/:id', component: FiliereDetail, canActivate: [authGuard], data: { roles: ['FORMATEUR', 'ADMIN'] } },
   { path: 'login', component: Login },
   { path: '', redirectTo: '/formateur', pathMatch: 'full' }
 ];

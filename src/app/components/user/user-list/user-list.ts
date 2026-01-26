@@ -19,7 +19,7 @@ export class UserList implements OnInit {
 
   ngOnInit(): void {
     this.users$ = this.getEtudiants().pipe(
-      map(etudiant => etudiant.sort((a, b) => new Date(b.dateEntree ?? 0).getTime() - new Date(a.dateEntree?? 0).getTime()))
+      map(etudiant => etudiant.sort((a, b) => new Date(a.dateEntree ?? 0).getTime() - new Date(b.dateEntree?? 0).getTime()))
     );
   }
   

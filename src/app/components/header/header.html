@@ -1,9 +1,11 @@
-<nav>
-    <ul>
-        <li>
-            @if (logged === true) {
-                <button (click)="logout()">Déconnexion</button>
-            }
-        </li>
-    </ul>
+<nav class="bg-white shadow-sm border-b">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+    <span class="text-xl font-bold text-blue-600">VDE</span>
+    @if (logged) {
+      <button (click)="logout()" class="text-gray-600 hover:text-red-500 flex items-center gap-2">
+        <lucide-icon [img]="LogOut" class="w-4 h-4"></lucide-icon>
+        Déconnexion
+      </button>
+    }
+  </div>
 </nav>

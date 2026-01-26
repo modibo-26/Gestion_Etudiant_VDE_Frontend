@@ -24,5 +24,20 @@ export class FiliereService {
     return this.http.get<User[]>(`${this.apiUrl}/${id}/users`)
   }
 
+  addFiliere(filiere: Filiere) {
+    return this.http.post<Filiere>(`${this.apiUrl}`, filiere)
+  }
+
+  updateFiliere(filiere: Filiere) {
+    return this.http.put<Filiere>(`${this.apiUrl}`, filiere)
+  }
+
+  addModule(filiereId: number, moduleId: number) {
+    return this.http.post(`${this.apiUrl}/${filiereId}/modules/${moduleId}`, {})
+  }
+
+  removeModule(filiereId: number, moduleId: number) {
+    return this.http.delete(`${this.apiUrl}/${filiereId}/modules/${moduleId}`, {})
+  }
 
 }

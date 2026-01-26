@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { ValidationService } from '../../services/validation';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-validation-board',
@@ -30,6 +31,10 @@ export class ValidationBoard implements OnInit {
   private userService = inject(UserService);
 
   private cdr = inject(ChangeDetectorRef)
+
+  private auth = inject(Auth)
+
+  isFormateur = this.auth.getRole() === 'FORMATEUR'
   
   ngOnInit(): void {
     console.log(this.editable)

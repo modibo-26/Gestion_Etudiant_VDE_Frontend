@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,15 @@ export class Auth {
     
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.role;
+  }
+
+
+  getCurrentUser(): User | null {
+    const token =  this.getToken();
+    if (!token) return null;
+    
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.user;
   }
 
   logout(): void {

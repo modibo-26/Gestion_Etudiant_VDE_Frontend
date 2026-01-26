@@ -1,1 +1,42 @@
-<app-user-form></app-user-form>
+<div class="max-w-7xl mx-auto p-6">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Administrateur : {{ user.prenom }} {{ user.nom }}</h1>
+
+    <div class="flex gap-2 mb-6">
+        <button 
+            (click)="changeTab('user')" 
+            [class]="activeTab === 'user' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'"
+            class="px-4 py-2 rounded-lg shadow hover:shadow-md transition">
+            Utilisateur
+        </button>
+        <button 
+            (click)="changeTab('filiere-module')" 
+            [class]="activeTab === 'filiere-module' ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'"
+            class="px-4 py-2 rounded-lg shadow hover:shadow-md transition">
+            Filières et Modules
+        </button>
+    </div>
+
+    @if (activeTab === "user") {
+        <app-user-form></app-user-form>
+    }
+    @if (activeTab === "filiere-module") {
+        <div class="grid grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-4">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+                    <lucide-icon></lucide-icon>
+                    Filières
+                </h2>
+                <app-filiere-list [editable]="true" />
+            </div>
+            <div class="bg-white rounded-lg shadow p-4">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+                    <lucide-icon></lucide-icon>
+                    Modules
+                </h2>
+                <app-module-list [editable]="true" />
+            </div>
+        </div> 
+    
+
+    }
+</div>

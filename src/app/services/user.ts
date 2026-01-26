@@ -34,12 +34,11 @@ export class UserService {
   }
 
   createUser(user: User) {
-    return this.http.post<User>(this.apiUrl, user)
+    return this.http.post<User>(`${this.apiUrl}/create`, user)
   }
 
   assignFiliere(userId: number, filiereId: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${userId}/filiere/${filiereId}`, {});
   }
-
   
 }

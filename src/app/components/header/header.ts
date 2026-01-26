@@ -1,14 +1,19 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Auth } from '../../services/auth';
 import { Router } from '@angular/router';
+import { LucideAngularModule, LogOut } from 'lucide-angular';
+
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [LucideAngularModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header {
+
+  readonly LogOut = LogOut ;
+
 
   private authService = inject(Auth)
   private router =inject(Router)

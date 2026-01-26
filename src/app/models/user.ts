@@ -10,4 +10,5 @@ export interface User {
     dateEntree?: Date
     role?: string
     filiere?:Filiere
+    progression?: number
 }

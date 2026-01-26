@@ -1,14 +1,22 @@
-@if (user$ | async; as user) {
-    <div class="bg-white p-6 rounded-lg shadow mb-6">
-        <div class="flex items-center gap-4">
-            <div class="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold">
-                {{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}
-            </div>
-            <div>
-                <h1 class="text-xl font-bold">{{ user.prenom }} {{ user.nom }}</h1>
-                <p class="text-gray-600">{{ user.email }}</p>
-            </div>
+<div class="max-w-7xl mx-auto p-6">
+  @if (user$ | async; as user) {
+    <div class="bg-white p-6 rounded-xl shadow mb-6">
+      <div class="flex items-center gap-4">
+        <div class="bg-blue-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-lg">
+          {{ user.prenom.charAt(0) }}{{ user.nom.charAt(0) }}
         </div>
+        <div>
+          <h1 class="text-xl font-bold">{{ user.prenom }} {{ user.nom }}</h1>
+          <p class="text-gray-600">{{ user.email ?? 'Pas d\'email' }}</p>
+          <p class="text-sm text-blue-600">{{ user.filiere?.nom ?? 'Aucune filière' }}</p>
+          <p class="text-sm text-gray-400">{{ user.code ?? 'Pas de code' }}
+        </div>
+      </div>
     </div>
-    <app-validation-board [userId]="user.id" [editable]="true" />
-}
+    
+    <div class="bg-white rounded-xl shadow p-4">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Ma progression : {{ user.progression| number:'1.0-0' }}%</h2>
+      <app-validation-board [userId]="user.id" [editable]="true" />
+    </div>
+  }
+</div>

@@ -1,23 +1,35 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user';
 import { User } from '../../../models/user';
+import { LucideAngularModule, UserPlus } from 'lucide-angular';
 
 @Component({
   selector: 'app-user-form',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LucideAngularModule
   ],
   templateUrl: './user-form.html',
   styleUrl: './user-form.scss',
 })
 export class UserForm{
 
+  userPlusIcon = UserPlus;
+
   private builder = inject(FormBuilder)
 
   private service = inject(UserService)
 
+  private cdr = inject(ChangeDetectorRef)
+
   @Input() user?: User
+
+  showModal = false
+
+  generatedPassword = ''
+
+  generatedEmail = ''
 
   userForm = this.builder.group({
     nom: ['', Validators.required],
@@ -36,10 +48,18 @@ export class UserForm{
     this.service.createUser(user).subscribe({
       next: (createdUser) => {
         console.log('Password généré:', createdUser.password);
-        // Afficher le password à l'admin ou rediriger
+        this.generatedPassword = createdUser.password!
+        this.generatedEmail = createdUser.email!
+        this.showModal = true
+        console.log(this.showModal)
+        this.cdr.detectChanges()
       },
       error: (err) => console.error(err)
     });
+  }
+
+  closeModal() {
+    this.showModal = false
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -9,7 +9,7 @@ import { Auth } from '../../services/auth';
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
-export class Login {
+export class Login implements OnInit {
 
   private service = inject(Auth)
 
@@ -22,6 +22,13 @@ export class Login {
     email: [null, [Validators.required, Validators.email]],
     password: [null, [Validators.required]],
   });
+
+  ngOnInit(): void {
+    const role = this.service.getRole()
+    if(role) {
+      this.router.navigateByUrl(`/${role.toLocaleLowerCase()}`);
+    }
+  }
 
   onSubmitForm(): void {
     this.service.login(this.loginForm.value.email!, this.loginForm.value.password!)

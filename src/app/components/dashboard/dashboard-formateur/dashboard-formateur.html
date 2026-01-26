@@ -1,32 +1,53 @@
-<div class="flex gap-4 p-4">
-  <div class="flex-1">
-    <h2>Étudiants</h2>
-    <app-user-list />
-  </div>
-  <div class="flex-1">
-    <h2>Filières</h2>
-    <app-filiere-list />
-  </div>
-</div>
+<div class="max-w-7xl mx-auto p-6">
+  <h1 class="text-2xl font-bold text-gray-800 mb-6">Formateur : {{ user.prenom }} {{ user.nom }}</h1>
+  
+  <div class="grid grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-4">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+        <lucide-icon [img]="usersIcon" class="w-5 h-5"></lucide-icon>
+        Étudiants
+      </h2>
+      <app-user-list />
+    </div>
+    <div class="bg-white rounded-lg shadow p-4">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+        <lucide-icon [img]="bookOpenIcon" class="w-5 h-5"></lucide-icon>
+        Filières
+      </h2>
+      <app-filiere-list />
+    </div>
+  
 
-<div class="p-4">
-  <h2 class="text-xl font-bold mb-4">Validations en attente</h2>
-  @if (validations$ | async; as validations) {
-    <div class="space-y-3">
-      @for (validation of validations; track validation.id) {
-        <div class="bg-white p-4 rounded-lg shadow flex justify-between items-center">
-          <div>
-            <p class="font-semibold">{{ validation.user.prenom }} {{ validation.user.nom }}</p>
-            <p class="text-sm text-gray-500">{{ validation.user.code ?? 'Pas de code' }}</p>
-            <p class="text-blue-600">{{ validation.module.nom }}</p>
-            <p class="text-blue-600">{{ validation.user.filiere?.nom }}</p>
-          </div>
-          <div class="flex gap-2">
-            <button (click)="reponse(validation.id, 'TERMINE')" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Accepter</button>
-            <button (click)="reponse(validation.id, 'EN_COURS')" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Refuser</button>
-          </div>
+  <div class="bg-white rounded-lg shadow p-4">
+    <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+      <lucide-icon [img]="clockIcon" class="w-5 h-5"></lucide-icon>
+      Validations en attente
+    </h2>
+    @if (validations$ | async; as validations) {
+      @if (validations.length === 0) {
+        <p class="text-gray-500 text-center py-4">Aucune validation en attente</p>
+      } @else {
+        <div class="space-y-3">
+          @for (validation of validations; track validation.id) {
+            <div class="border rounded-lg p-4 flex justify-between items-center hover:bg-gray-50">
+              <div>
+                <p class="font-semibold">{{ validation.user.prenom }} {{ validation.user.nom }}</p>
+                <p class="text-sm text-gray-500">{{ validation.user.code ?? 'Pas de code' }}</p>
+                <p class="text-sm text-blue-600">{{ validation.module.nom }} - {{ validation.user.filiere?.nom }}</p>
+              </div>
+              <div class="flex gap-2">
+                <button (click)="reponse(validation.id, 'TERMINE')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1">
+                  <lucide-icon [img]="checkIcon" class="w-4 h-4"></lucide-icon>
+                </button>
+                <button (click)="reponse(validation.id, 'EN_COURS')" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition flex items-center gap-1">
+                  <lucide-icon [img]="xIcon" class="w-4 h-4"></lucide-icon>
+                </button>
+              </div>
+            </div>
+          }
         </div>
       }
-    </div>
-  }
+    }
+  </div>
+  </div>
 </div>

@@ -1,0 +1,16 @@
+<div>
+    <div class="bg-white p-4 rounded-lg shadow hover:bg-green-100 transition cursor-pointer">
+        <p class="font-semibold">{{ module.nom }}</p>
+        <p class="text-sm text-gray-600">{{ module.description }}</p>
+        @if (editable) {
+            <button (click)="onEdit.emit(module)" class="text-sm text-blue-500 hover:text-blue-700 mt-2">
+                Modifier
+            </button>
+        }
+        @if (deletable) {
+            <button (click)="onDelete.emit(module)" class="text-sm text-red-500 hover:text-red-700 mt-2 ml-2">
+                Retirer
+            </button>
+        }
+    </div>
+</div>

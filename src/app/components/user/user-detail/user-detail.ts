@@ -4,7 +4,7 @@ import { User } from '../../../models/user';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../../services/user';
 import { ModuleValidation } from '../../../models/module-validation';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe, JsonPipe } from '@angular/common';
 import { FiliereService } from '../../../services/filiere';
 import { Filiere } from '../../../models/filiere';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { ValidationBoard } from "../../validation-board/validation-board";
     ReactiveFormsModule,
     FormsModule,
     ValidationBoard,
+    DecimalPipe,
 ],
   templateUrl: './user-detail.html',
   styleUrl: './user-detail.scss',
