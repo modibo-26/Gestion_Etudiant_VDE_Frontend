@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { FiliereService } from '../../../services/filiere';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Filiere } from '../../../models/filiere';
 import { AsyncPipe } from '@angular/common';
 import { FiliereComponent } from '../filiere/filiere';
-import { LucideAngularModule, Plus } from "lucide-angular";
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BookOpen, LucideAngularModule, Plus } from "lucide-angular";
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-filiere-list',
@@ -13,7 +13,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     AsyncPipe,
     FiliereComponent, 
     LucideAngularModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule,
   ],
   templateUrl: './filiere-list.html',
   styleUrl: './filiere-list.scss',
@@ -22,15 +23,21 @@ export class FiliereList implements OnInit {
   
   readonly plusIcon = Plus 
 
+  bookOpenIcon = BookOpen
+
   private cdr = inject(ChangeDetectorRef)
 
   private builder = inject(FormBuilder)
 
   private service = inject(FiliereService)
 
-  filiere$!: Observable<Filiere[]>
+  filieres$!: Observable<Filiere[]>
+
+  filteredFilieres$!: Observable<Filiere[]>;
 
   modal = false
+
+  searchItem = ''
 
   selectedFiliere: Filiere | null = null;
 
@@ -43,7 +50,8 @@ export class FiliereList implements OnInit {
 
 
   ngOnInit(): void {
-    this.filiere$ = this.service.getFilieres();
+    this.filieres$ = this.service.getFilieres();
+    this.filteredFilieres$ = this.filieres$
   }
 
   onSubmitForm() {
@@ -60,12 +68,24 @@ export class FiliereList implements OnInit {
     request.subscribe({
       next: (createdFiliere) => {
         console.log(createdFiliere)
-        this.filiere$ = this.service.getFilieres();
+        this.filieres$ = this.service.getFilieres();
         this.cdr.detectChanges()
         this.closeModal()
       },
       error: (err) => console.error(err)
     });
+  }
+
+  search(){
+    return this.filteredFilieres$ = this.filieres$.pipe(
+      map(users => users.filter(u => 
+        this.normalize(u.nom).includes(this.searchItem.toLocaleLowerCase())
+      ))
+    )
+  }
+
+  normalize(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
   openModal(filiere?: Filiere) {
@@ -80,6 +100,5 @@ export class FiliereList implements OnInit {
     this.modal = false;
     this.selectedFiliere = null;
     this.filiereForm.reset()
-
   }
 }

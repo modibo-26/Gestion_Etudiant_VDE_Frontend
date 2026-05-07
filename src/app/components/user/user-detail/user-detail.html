@@ -15,7 +15,7 @@
     @if (user.filiere) {
     <div class="bg-white rounded-xl shadow p-4">
         <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">Progression : {{ user.progression| number:'1.0-0' }}%</h2>
-        <app-validation-board [userId]="user.id" [editable]="true" />
+        <app-validation-board [userId]="user.id" [editable]="true" (statusChanged)="refreshUser()" />
     </div>
     } @else {
         <div class="bg-white rounded-xl shadow p-6">

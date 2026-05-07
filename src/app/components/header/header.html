@@ -1,6 +1,8 @@
 <nav class="bg-white shadow-sm border-b">
   <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-    <span class="text-xl font-bold text-blue-600">VDE</span>
+    <div class="flex items-center gap-2">
+      <img src="favicon.ico" alt="Logo" class="h-10" (click)="home()">
+    </div>
     @if (logged) {
       <button (click)="logout()" class="text-gray-600 hover:text-red-500 flex items-center gap-2">
         <lucide-icon [img]="LogOut" class="w-4 h-4"></lucide-icon>

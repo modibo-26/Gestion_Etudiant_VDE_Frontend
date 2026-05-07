@@ -1,4 +1,15 @@
-@if (modules$ | async; as modules) {
+<h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+  <lucide-icon [img]="packageIcon"></lucide-icon>
+  Modules
+</h2>
+<input 
+type="text" 
+placeholder="Rechercher..." 
+[(ngModel)]="searchItem"
+(input)="search()"
+class="px-3 py-1 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-40"
+>
+@if (filteredModules$ | async; as modules) {
   <p class="text-sm text-gray-500 mb-4">{{ modules.length }} modules</p>
   @if (editable) {
     <button (click)="openModal()" class="flex items-center gap-1 bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 transition">
@@ -18,47 +29,47 @@
 }
 @if (editable) {
   @if (modal) {
-  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-xl shadow p-6 max-w-md">
-    <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
-      {{ selectedModule ? 'Modifier' : 'Ajouter' }} un module
-    </h2>
-    
-    <form [formGroup]="moduleForm" (ngSubmit)="onSubmitForm()">
-      <div class="mb-4">
-        <label class="block text-gray-700 mb-2">Nom</label>
-        <input 
-          type="text" 
-          formControlName="nom"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl shadow p-6 max-w-md">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+        {{ selectedModule ? 'Modifier' : 'Ajouter' }} un module
+      </h2>
       
-      <div class="mb-4">
-        <label class="block text-gray-700 mb-2">Description</label>
-        <input 
-          type="text" 
-          formControlName="description"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+      <form [formGroup]="moduleForm" (ngSubmit)="onSubmitForm()">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Nom</label>
+          <input 
+            type="text" 
+            formControlName="nom"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Description</label>
+          <input 
+            type="text" 
+            formControlName="description"
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        
+        <button  
+          type="submit"
+          [disabled]="moduleForm.invalid"
+          class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 transition"
+        >
+          {{ selectedModule ? 'Modifier' : 'Créer' }}
+        </button>
+        <button 
+          type="button"
+          (click)="closeModal()" 
+          class="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+        >
+          Fermer
+        </button>
+      </form>
       </div>
-      
-      <button  
-        type="submit"
-        [disabled]="moduleForm.invalid"
-        class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 transition"
-      >
-        {{ selectedModule ? 'Modifier' : 'Créer' }}
-      </button>
-      <button 
-        type="button"
-        (click)="closeModal()" 
-        class="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
-      >
-        Fermer
-      </button>
-    </form>
     </div>
-  </div>
   }
 }

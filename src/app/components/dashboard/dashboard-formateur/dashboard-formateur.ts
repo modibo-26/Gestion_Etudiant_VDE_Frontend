@@ -7,7 +7,7 @@ import { ModuleValidation } from '../../../models/module-validation';
 import { AsyncPipe } from '@angular/common';
 import { Auth } from '../../../services/auth';
 import { User } from '../../../models/user';
-import { BookOpen, Check, Clock, LucideAngularModule, Users, X } from 'lucide-angular';
+import { Check, Clock, LucideAngularModule, X } from 'lucide-angular';
 
 
 @Component({
@@ -23,8 +23,6 @@ import { BookOpen, Check, Clock, LucideAngularModule, Users, X } from 'lucide-an
 })
 export class DashboardFormateur implements OnInit {
 
-  usersIcon = Users;
-  bookOpenIcon = BookOpen;
   clockIcon = Clock;
   checkIcon = Check;
   xIcon = X;

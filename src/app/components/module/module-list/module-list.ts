@@ -1,11 +1,11 @@
 import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { ModuleService } from '../../../services/module';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Module } from '../../../models/module';
 import { AsyncPipe } from '@angular/common';
 import { ModuleComponent } from "../module/module";
-import { LucideAngularModule, Plus } from "lucide-angular"
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { BookOpen, Layers, LucideAngularModule, Package, Plus } from "lucide-angular"
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-module-list',
@@ -13,7 +13,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
     AsyncPipe, 
     ModuleComponent, 
     LucideAngularModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   templateUrl: './module-list.html',
   styleUrl: './module-list.scss',
@@ -25,6 +26,8 @@ export class ModuleList implements OnInit {
   private cdr = inject(ChangeDetectorRef)
 
   readonly plusIcon = Plus
+
+  packageIcon = Layers
 
   modal = false
 
@@ -41,8 +44,13 @@ export class ModuleList implements OnInit {
 
   modules$!: Observable<Module[]>
 
+  filteredModules$!: Observable<Module[]>;
+
+  searchItem = ''
+
   ngOnInit(): void {
     this.modules$ = this.service.getModules()
+    this.filteredModules$ = this.modules$
   }
 
   onSubmitForm() {
@@ -66,6 +74,18 @@ export class ModuleList implements OnInit {
       },
       error: (err) => console.error(err)
     });
+  }
+
+  search(){
+    return this.filteredModules$ = this.modules$.pipe(
+      map(modules => modules.filter(m => 
+        this.normalize(m.nom).includes(this.searchItem.toLocaleLowerCase())
+      ))
+    )
+  }
+
+  normalize(str: string): string {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 
   openModal(module?: Module) {

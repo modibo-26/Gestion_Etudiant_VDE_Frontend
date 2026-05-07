@@ -10,13 +10,14 @@ import { Auth } from '../../../services/auth';
 import { ModuleService } from '../../../services/module';
 import { ModuleComponent } from '../../module/module/module';
 import { Module } from '../../../models/module';
+import { UserList } from "../../user/user-list/user-list";
 
 @Component({
   selector: 'app-filiere-detail',
   imports: [
     AsyncPipe,
-    UserCompenent,
     ModuleComponent,
+    UserList
 ],
   templateUrl: './filiere-detail.html',
   styleUrl: './filiere-detail.scss',

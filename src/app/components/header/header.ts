@@ -27,4 +27,8 @@ export class Header {
     this.router.navigateByUrl('login')
   }
 
+  home() {
+    this.router.navigateByUrl('login')
+  }
+
 }

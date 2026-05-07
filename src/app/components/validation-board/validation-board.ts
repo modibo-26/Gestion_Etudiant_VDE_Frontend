@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ModuleValidation } from '../../models/module-validation';
 import { UserService } from '../../services/user';
 import { map, Observable } from 'rxjs';
@@ -21,6 +21,8 @@ export class ValidationBoard implements OnInit {
   @Input() userId!: number
   @Input() editable = false;
 
+  @Output() statusChanged = new EventEmitter<void>();
+
   aFaire$!: Observable<ModuleValidation[]>;
   enCours$!: Observable<ModuleValidation[]>;
   enAttente$!: Observable<ModuleValidation[]>;
@@ -39,6 +41,7 @@ export class ValidationBoard implements OnInit {
   ngOnInit(): void {
     console.log(this.editable)
     this.validations$ =  this.getValidation()
+    console.log(this.isFormateur)
 
     this.aFaire$ = this.getByStatut('A_FAIRE');
     this.enCours$ = this.getByStatut('EN_COURS');
@@ -65,7 +68,6 @@ export class ValidationBoard implements OnInit {
   changeStatut(id: number, statut: string) {
     return this.service.updateStatut(id, statut).subscribe(() =>{
       this.refresh()
-      this.cdr.detectChanges()
     })
   }
 
@@ -76,5 +78,7 @@ export class ValidationBoard implements OnInit {
     this.enCours$ = this.getByStatut('EN_COURS');
     this.enAttente$ = this.getByStatut('EN_ATTENTE');
     this.termine$ = this.getByStatut('TERMINE');
+    this.statusChanged.emit()
+    this.cdr.detectChanges()
   }
 }

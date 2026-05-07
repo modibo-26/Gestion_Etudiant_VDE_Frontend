@@ -22,17 +22,9 @@
     @if (activeTab === "filiere-module") {
         <div class="grid grid-cols-2 gap-6 mb-8">
             <div class="bg-white rounded-lg shadow p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
-                    <lucide-icon></lucide-icon>
-                    Filières
-                </h2>
                 <app-filiere-list [editable]="true" />
             </div>
             <div class="bg-white rounded-lg shadow p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
-                    <lucide-icon></lucide-icon>
-                    Modules
-                </h2>
                 <app-module-list [editable]="true" />
             </div>
         </div> 

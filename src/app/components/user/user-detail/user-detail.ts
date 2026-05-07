@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { User } from '../../../models/user';
 import { ActivatedRoute } from '@angular/router';
@@ -36,6 +36,8 @@ export class UserDetail implements OnInit {
 
   private filiereService = inject(FiliereService)
 
+  private cdr = inject(ChangeDetectorRef)
+
   ngOnInit(): void {
     this.user$ = this.getUser()
     this.filieres$ = this.getFilieres()
@@ -54,5 +56,11 @@ export class UserDetail implements OnInit {
     this.service.assignFiliere(userId, filiereId).subscribe(() => {
       location.reload()
     });
+  }
+
+  refreshUser() {
+    this.getUser()
+    console.log("refreshed")
+    this.cdr.detectChanges()
   }
 }

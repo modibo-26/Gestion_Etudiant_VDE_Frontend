@@ -25,7 +25,7 @@ export class Auth {
   getRole(): string | null {
     const token =  this.getToken();
     if (!token) return null;
-    
+
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.role;
   }
@@ -34,7 +34,7 @@ export class Auth {
   getCurrentUser(): User | null {
     const token =  this.getToken();
     if (!token) return null;
-    
+
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.user;
   }
@@ -45,5 +45,5 @@ export class Auth {
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
-  } 
+  }
 }

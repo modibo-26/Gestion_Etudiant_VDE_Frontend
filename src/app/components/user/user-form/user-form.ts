@@ -37,7 +37,6 @@ export class UserForm{
     role: ['ETUDIANT']
   });
 
-
   onSubmitForm() {
     const user: User = {
       nom: this.userForm.value.nom!,
@@ -47,15 +46,18 @@ export class UserForm{
     
     this.service.createUser(user).subscribe({
       next: (createdUser) => {
-        console.log('Password généré:', createdUser.password);
+        console.log('Password généré:', createdUser.password)
         this.generatedPassword = createdUser.password!
         this.generatedEmail = createdUser.email!
-        this.showModal = true
-        console.log(this.showModal)
+        this.openModal()
         this.cdr.detectChanges()
       },
       error: (err) => console.error(err)
     });
+  }
+
+  openModal() {
+    this.showModal = true
   }
 
   closeModal() {
