@@ -6,6 +6,7 @@ import { DashboardAdmin } from './components/dashboard/dashboard-admin/dashboard
 import { DashboardEtudiant } from './components/dashboard/dashboard-etudiant/dashboard-etudiant';
 import { DashboardFormateur } from './components/dashboard/dashboard-formateur/dashboard-formateur';
 import { Login } from './components/login/login';
+import { SuperFiliereForm } from './components/super-filiere/super-filiere-form/super-filiere-form';
 
 export const routes: Routes = [
   { path: 'formateur', component: DashboardFormateur, canActivate: [authGuard], data: { roles: ['FORMATEUR'] } },
@@ -13,6 +14,7 @@ export const routes: Routes = [
   { path: 'etudiant', component: DashboardEtudiant, canActivate: [authGuard], data: {roles: ['ETUDIANT']} },
   { path: 'users/:id', component: UserDetail, canActivate: [authGuard], data: { roles: ['FORMATEUR'] } },
   { path: 'filieres/:id', component: FiliereDetail, canActivate: [authGuard], data: { roles: ['FORMATEUR', 'ADMIN'] } },
+  { path: 'super-filieres-form', component: SuperFiliereForm, canActivate: [authGuard], data: { roles: ['ADMIN'] } },
   { path: 'login', component: Login },
   { path: '', redirectTo: '/formateur', pathMatch: 'full' }
 ];

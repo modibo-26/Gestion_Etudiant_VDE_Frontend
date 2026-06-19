@@ -1,4 +1,5 @@
 import { Filiere } from "./filiere"
+import { SuperFiliere } from "./super-filiere"
 
 export interface User {
     id: number
@@ -10,5 +11,6 @@ export interface User {
     dateEntree?: Date
     role?: string
     filiere?:Filiere
+    superFiliere?:SuperFiliere
     progression?: number
 }

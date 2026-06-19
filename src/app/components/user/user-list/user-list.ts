@@ -11,7 +11,7 @@ import { FiliereService } from '../../../services/filiere';
 @Component({
   selector: 'app-user-list',
   imports: [
-    AsyncPipe, 
+    AsyncPipe,
     UserCompenent,
     FormsModule,
     LucideAngularModule,
@@ -35,7 +35,7 @@ export class UserList implements OnInit {
   usersIcon = Users;
 
   ngOnInit(): void {
-    const request = this.filiereId 
+    const request = this.filiereId
     ? this.filiereService.getUsers(this.filiereId)
     : this.service.getEtudiants();
     this.users$ = request.pipe(
@@ -51,7 +51,7 @@ export class UserList implements OnInit {
 
   search(){
     return this.filteredUsers$ = this.users$.pipe(
-      map(users => users.filter(u => 
+      map(users => users.filter(u =>
         this.normalize(u.nom).includes(this.searchItem.toLocaleLowerCase()) ||
         this.normalize(u.prenom).includes(this.searchItem.toLocaleLowerCase())
       ))
