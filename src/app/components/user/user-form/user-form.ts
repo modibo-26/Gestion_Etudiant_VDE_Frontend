@@ -1,21 +1,30 @@
-import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user';
 import { User } from '../../../models/user';
-import { LucideAngularModule, UserPlus } from 'lucide-angular';
+import { LucideAngularModule, UserPlus, Users } from 'lucide-angular';
+import { CommonModule } from '@angular/common';
+import { Observable, Observer } from 'rxjs';
 
 @Component({
   selector: 'app-user-form',
   imports: [
     ReactiveFormsModule,
-    LucideAngularModule
+    LucideAngularModule,
+    CommonModule
   ],
   templateUrl: './user-form.html',
   styleUrl: './user-form.scss',
 })
-export class UserForm{
+export class UserForm implements OnInit{
 
   userPlusIcon = UserPlus;
+  utilisateurs=Users;
+
+  users$!: Observable<User[]>;
+  loading = true;
+  private userService=inject(UserService);
+
 
   private builder = inject(FormBuilder)
 
@@ -31,11 +40,17 @@ export class UserForm{
 
   generatedEmail = ''
 
+
+  ngOnInit(): void {
+    this.users$ = this.userService.getAllUsers();
+  }
+
   userForm = this.builder.group({
     nom: ['', Validators.required],
     prenom: ['', Validators.required],
     role: ['ETUDIANT']
   });
+
 
   onSubmitForm() {
     const user: User = {
@@ -54,6 +69,8 @@ export class UserForm{
       },
       error: (err) => console.error(err)
     });
+
+    
   }
 
   openModal() {
