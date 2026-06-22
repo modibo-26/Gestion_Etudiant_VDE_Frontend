@@ -40,5 +40,9 @@ export class UserService {
   assignFiliere(userId: number, filiereId: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/${userId}/filiere/${filiereId}`, {});
   }
+
+  getAllUsers(){
+    return this.http.get<User[]>(`${this.apiUrl}`);
+  }
   
 }

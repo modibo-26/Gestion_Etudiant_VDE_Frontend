@@ -1,52 +1,91 @@
 <div class="min-h-screen flex flex-col items-center justify-center p-6">
-  <h1 class="text-2xl font-bold text-gray-800 mb-6">Admin</h1>
-  
-  <div class="bg-white rounded-xl shadow p-6 max-w-md">
-    <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
-      <lucide-icon [img]="userPlusIcon" class="w-5 h-5"></lucide-icon>
-      Créer un utilisateur
-    </h2>
-    
-    <form [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
-      <div class="mb-4">
-        <label class="block text-gray-700 mb-2">Nom</label>
-        <input 
-          type="text" 
-          formControlName="nom"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-      
-      <div class="mb-4">
-        <label class="block text-gray-700 mb-2">Prénom</label>
-        <input 
-          type="text" 
-          formControlName="prenom"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
+  <h1 class="text-2xl font-bold text-gray-800 mb-8">Admin</h1>
 
-      <div class="mb-6">
-        <label class="block text-gray-700 mb-2">Rôle</label>
-        <select 
-          formControlName="role"
-          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="ETUDIANT">Étudiant</option>
-          <option value="FORMATEUR">Formateur</option>
-        </select>
-      </div>
+  <!-- Conteneur principal en flex row -->
+  <div class="flex flex-col lg:flex-row gap-8 w-full max-w-7xl">
+    
+    <!-- === SECTION TABLEAU DES UTILISATEURS === -->
+    <div class="flex-1 bg-white rounded-xl shadow p-6">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+        <lucide-icon [img]="utilisateurs" class="w-5 h-5"></lucide-icon>
+        Utilisateurs
+      </h2>
       
-      <button 
-        type="submit"
-        [disabled]="userForm.invalid"
-        class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 transition"
-      >
-        Créer
-      </button>
-    </form>
+     
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left">
+          <thead class="bg-gray-50 border-b">
+            <tr>
+              <th class="px-4 py-3 font-medium text-gray-700">Nom</th>
+              <th class="px-4 py-3 font-medium text-gray-700">Prénom</th>
+              <th class="px-4 py-3 font-medium text-gray-700">Email</th>
+              <th class="px-4 py-3 font-medium text-gray-700">Rôle</th>
+              <th class="px-4 py-3 font-medium text-gray-700 text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            @for (user of users$ | async; track user.id || user.email) {
+          <tr>
+              <td class="px-4 py-3">{{ user.nom }}</td>
+              <td class="px-4 py-3">{{ user.prenom }}</td>
+              <td class="px-4 py-3 font-mono text-sm">{{ user.email }}</td>
+              <td class="px-4 py-3">
+                <span class="px-2.5 py-1 rounded-full text-xs font-medium"
+                      [class.bg-blue-100]="user.role === 'ETUDIANT'"
+                      [class.text-blue-700]="user.role === 'ETUDIANT'"
+                      [class.bg-purple-100]="user.role === 'FORMATEUR'"
+                      [class.text-purple-700]="user.role === 'FORMATEUR'">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-center">
+                <!-- boutons actions -->
+              </td>
+            </tr>}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- === SECTION FORMULAIRE CRÉATION === -->
+    <div class="w-full lg:w-96 bg-white rounded-xl shadow p-6 flex-shrink-0">
+      <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+        <lucide-icon [img]="userPlusIcon" class="w-5 h-5"></lucide-icon>
+        Créer un utilisateur
+      </h2>
+      
+      <form [formGroup]="userForm" (ngSubmit)="onSubmitForm()">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Nom</label>
+          <input type="text" formControlName="nom"
+                 class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Prénom</label>
+          <input type="text" formControlName="prenom"
+                 class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-2">Rôle</label>
+          <select formControlName="role"
+                  class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="ETUDIANT">Étudiant</option>
+            <option value="FORMATEUR">Formateur</option>
+          </select>
+        </div>
+        
+        <button type="submit"
+                [disabled]="userForm.invalid"
+                class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 transition">
+          Créer
+        </button>
+      </form>
+    </div>
   </div>
 </div>
+
 @if (showModal) {
   <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white p-6 rounded-xl shadow-lg max-w-md w-full mx-4">
@@ -60,8 +99,8 @@
         {{ generatedPassword }}
       </div>
       <p class="text-sm text-red-500 mt-2">Notez ce mot de passe, il ne sera plus visible.</p>
-      <button 
-        (click)="closeModal()" 
+      <button
+        (click)="closeModal()"
         class="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
       >
         Fermer
