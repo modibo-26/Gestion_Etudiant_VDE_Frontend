@@ -86,7 +86,25 @@
   </div>
 </div>
 
-<!-- Modal inchangé -->
 @if (showModal) {
-  <!-- ... ton modal reste identique ... -->
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl shadow-lg max-w-md w-full mx-4">
+      <h3 class="text-lg font-bold mb-4">Utilisateur créé</h3>
+      <p class="text-gray-600 mb-2">Adresse email généré  :</p>
+      <div class="bg-gray-100 p-3 rounded-lg font-mono text-center text-lg select-all">
+        {{ generatedEmail }}
+      </div>
+      <p class="text-gray-600 mb-2">Mot de passe généré :</p>
+      <div class="bg-gray-100 p-3 rounded-lg font-mono text-center text-lg select-all">
+        {{ generatedPassword }}
+      </div>
+      <p class="text-sm text-red-500 mt-2">Notez ce mot de passe, il ne sera plus visible.</p>
+      <button
+        (click)="closeModal()"
+        class="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+      >
+        Fermer
+      </button>
+    </div>
+  </div>
 }
