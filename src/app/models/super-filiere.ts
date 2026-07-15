@@ -5,8 +5,8 @@ export interface SuperFiliere {
     id: number
     nom: string
     description: string
-    users?: User[]
-    filieres?: Filiere[]
-    nbEtudiants: number
+    //users?: User[]
+    //filieres?: Filiere[]
+    //nbEtudiants: number
     nbFilieres: number
 }

@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Filiere } from '../models/filiere';
 import { User } from '../models/user';
+import { Module } from '../models/module';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +40,9 @@ export class FiliereService {
   removeModule(filiereId: number, moduleId: number) {
     return this.http.delete(`${this.apiUrl}/${filiereId}/modules/${moduleId}`, {})
   }
+
+  getModulesByFiliere(id: number): Observable<Module[]> {
+  return this.http.get<Module[]>(`${this.apiUrl}/${id}/filiere_modules`);
+}
 
 }

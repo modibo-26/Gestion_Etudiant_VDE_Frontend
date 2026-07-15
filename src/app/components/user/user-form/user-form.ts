@@ -1,84 +1,88 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user';
 import { User } from '../../../models/user';
 import { LucideAngularModule, UserPlus, Users } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
-import { Observable, Observer } from 'rxjs';
+import { Observable } from 'rxjs';
+import { SuperFiliere } from '../../../models/super-filiere';
+import { SuperFiliereService } from '../../../services/super-filiere';
 
 @Component({
   selector: 'app-user-form',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     LucideAngularModule,
+    FormsModule,
     CommonModule
   ],
   templateUrl: './user-form.html',
   styleUrl: './user-form.scss',
 })
-export class UserForm implements OnInit{
+export class UserForm implements OnInit {
 
+  // Icônes
   userPlusIcon = UserPlus;
-  utilisateurs=Users;
+  utilisateurs = Users;
+  
 
-  users$!: Observable<User[]>;
-  loading = true;
-  private userService=inject(UserService);
+  // Données
+  superfilieres$!:Observable<SuperFiliere[]>;
+  searchTerm = '';
+  selectedRole = '';
 
+  private userService = inject(UserService);
+  private superFiliereService = inject(SuperFiliereService);
+  private builder = inject(FormBuilder);
 
-  private builder = inject(FormBuilder)
-
-  private service = inject(UserService)
-
-  private cdr = inject(ChangeDetectorRef)
-
-  @Input() user?: User
-
-  showModal = false
-
-  generatedPassword = ''
-
-  generatedEmail = ''
-
-
-  ngOnInit(): void {
-    this.users$ = this.userService.getAllUsers();
-  }
+  showModal = false;
+  generatedPassword = '';
+  generatedEmail = '';
 
   userForm = this.builder.group({
     nom: ['', Validators.required],
     prenom: ['', Validators.required],
+    superFiliereId:[''],
     role: ['ETUDIANT']
   });
 
+  ngOnInit(): void {
+    this.loadUsers();
+  }
 
+  private loadUsers() {
+    this.superfilieres$ = this.superFiliereService.getSuperFilieres();
+  }
+
+  // ==================== ACTIONS ====================
   onSubmitForm() {
     const user: User = {
       nom: this.userForm.value.nom!,
       prenom: this.userForm.value.prenom!,
+      superFiliereId: this.userForm.value.superFiliereId,
       role: this.userForm.value.role!
     } as User;
-    
-    this.service.createUser(user).subscribe({
+
+    console.log(user);
+
+    this.userService.createUser(user).subscribe({
       next: (createdUser) => {
-        console.log('Password généré:', createdUser.password)
-        this.generatedPassword = createdUser.password!
-        this.generatedEmail = createdUser.email!
-        this.openModal()
-        this.cdr.detectChanges()
+        this.generatedEmail = createdUser.email!;
+        this.generatedPassword = createdUser.password!;
+        this.openModal();
+        this.loadUsers();
+        this.userForm.reset({ role: 'ETUDIANT' });
       },
       error: (err) => console.error(err)
     });
-
-    
   }
 
   openModal() {
-    this.showModal = true
+    this.showModal = true;
   }
 
   closeModal() {
-    this.showModal = false
+    this.showModal = false;
   }
-
 }
