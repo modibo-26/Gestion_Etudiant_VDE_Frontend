@@ -1,5 +1,5 @@
 <div class="max-w-7xl mx-auto p-6">
-  <h1 class="text-2xl font-bold text-gray-800 mb-6">Formateur : {{ user.prenom }} {{ user.nom }}</h1>
+  @if(user$ | async; as user){<h1 class="text-2xl font-bold text-gray-800 mb-6">Formateur : {{ user.prenom }} {{ user.nom }}</h1>}
   
   <div class="grid grid-cols-3 gap-6 mb-8">
     <div class="bg-white rounded-lg shadow p-4">
@@ -24,7 +24,7 @@
               <div>
                 <p class="font-semibold">{{ validation.user.prenom }} {{ validation.user.nom }}</p>
                 <p class="text-sm text-gray-500">{{ validation.user.code ?? 'Pas de code' }}</p>
-                <p class="text-sm text-blue-600">{{ validation.module.nom }} - {{ validation.user.filiere?.nom }}</p>
+                <p class="text-sm text-blue-600">{{ validation.module.nom }} </p>
               </div>
               <div class="flex gap-2">
                 <button (click)="reponse(validation.id, 'TERMINE')" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition flex items-center gap-1">

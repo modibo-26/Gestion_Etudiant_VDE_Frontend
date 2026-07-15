@@ -18,7 +18,7 @@ import { UserList } from "../../user/user-list/user-list";
     AsyncPipe,
     ModuleComponent,
     UserList
-],
+  ],
   templateUrl: './filiere-detail.html',
   styleUrl: './filiere-detail.scss',
 })
@@ -39,30 +39,42 @@ export class FiliereDetail implements OnInit {
   isAdmin = this.auth.getRole() === 'ADMIN';
   modules$!: Observable<Module[]>;
   modulesToAdd: Module[] = [];
+  allModules$!: Observable<Module[]>;
 
   ngOnInit(): void {
-    this.users$ = this.getUsers()
-    this.modules$ = this.moduleService.getModules();
-    this.refreshData()
+    this.users$ = this.getUsers();
+
+    this.modules$ = this.service.getModulesByFiliere(
+      +this.route.snapshot.params['id']);
+
+    this.allModules$ = this.moduleService.getModules();
+
+    this.refreshData();
+
   }
 
-  getFiliere(){
+  getFiliere() {
     const id = +this.route.snapshot.params['id'];
     return this.service.getFiliereById(id)
   }
 
-  getUsers(){
+  getUsers() {
     const id = +this.route.snapshot.params['id'];
     return this.service.getUsers(id);
   }
 
-  getModules(){
-    this.modules$ = this.moduleService.getModules();
+  getModules() {
+    const id = +this.route.snapshot.params['id'];
+  this.modules$ = this.service.getModulesByFiliere(id);
   }
 
-  getModulesToAdd(filiere: Filiere, modules: Module[]) {
-    const filiereModuleIds = new Set(filiere.modules?.map(m => m.id));
-    this.modulesToAdd = modules.filter(m => !filiereModuleIds.has(m.id));
+  getModulesToAdd(filiereModules: Module[],    allModules: Module[]) {
+
+    const ids = new Set(filiereModules.map(m => m.id));
+
+    this.modulesToAdd = allModules.filter(
+        m => !ids.has(m.id)
+    );
   }
 
   addModule(filiereId: number, moduleId: number) {
@@ -75,13 +87,21 @@ export class FiliereDetail implements OnInit {
     this.service.removeModule(filiereId, moduleId).subscribe(() => {
       this.refreshData()
     });
-  } 
+  }
 
   refreshData() {
     this.filiere$ = this.getFiliere()
-    combineLatest([this.filiere$, this.modules$]).subscribe(([filiere, module ]) => {
-      this.getModulesToAdd(filiere, module);
-    })
+    combineLatest([
+      this.modules$,
+      this.allModules$
+    ]).subscribe(([filiereModules, allModules]) => {
+
+      this.getModulesToAdd(
+        filiereModules,
+        allModules);
+
+    });
+
     this.cdr.detectChanges()
   }
 }

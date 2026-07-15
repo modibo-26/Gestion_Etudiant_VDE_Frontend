@@ -8,6 +8,9 @@ import { AsyncPipe } from '@angular/common';
 import { Auth } from '../../../services/auth';
 import { User } from '../../../models/user';
 import { Check, Clock, LucideAngularModule, X } from 'lucide-angular';
+import { Filiere } from '../../../models/filiere';
+import { FiliereService } from '../../../services/filiere';
+import { UserService } from '../../../services/user';
 
 
 @Component({
@@ -29,10 +32,14 @@ export class DashboardFormateur implements OnInit {
 
   private auth = inject(Auth)
 
-  user!: User
+  user$!: Observable<User>;
 
+  userFiliere$!: Observable<Filiere>;
+
+  private service = inject(UserService);
   private validationService = inject(ValidationService)
 
+  private filiereService = inject(FiliereService);
   private cdr = inject(ChangeDetectorRef)
 
   validations$!: Observable<ModuleValidation[]>
@@ -40,13 +47,15 @@ export class DashboardFormateur implements OnInit {
 
   ngOnInit(): void {
     this.validations$ = this.validationService.getByStatut("EN_ATTENTE")
-    this.user = this.auth.getCurrentUser()!;
-    console.log(this.user)
-    // console.log(this.user)
-    // const token = this.auth.getToken()
-    // const payload = JSON.parse(atob(token!.split('.')[1]));
-    // console.log(payload)
-    // this.user = payload.user
+   this.user$ = this.getConnect();
+    this.user$.subscribe((user )=> {
+     // console.log(user);
+    });
+    
+  }
+
+  getConnect() {
+    return this.service.getConnectUser();
   }
 
   reponse(id: number, statut: string) {

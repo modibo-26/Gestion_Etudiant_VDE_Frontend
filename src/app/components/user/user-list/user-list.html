@@ -1,15 +1,99 @@
-<h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+<div class="bg-white rounded-xl shadow p-8">
+  @if(users$ && !Ets$){
+  
+    <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
+    <lucide-icon [img]="usersIcon" class="w-5 h-5"></lucide-icon>
+    Utilisateurs
+  </h2>
+
+  <!-- Filtres -->
+   
+  <div class="flex flex-col sm:flex-row gap-3 mb-6">
+    <div class="flex-1">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        placeholder="Rechercher par nom ou prénom..."
+        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+    </div>
+
+    <div class="w-full sm:w-52">
+      <select 
+        [(ngModel)]="selectedRole"
+        (change)="onRoleChange()"
+        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">Tous les rôles</option>
+        <option value="ETUDIANT">Étudiant</option>
+        <option value="FORMATEUR">Formateur</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Contenu -->
+    <table class="w-full text-sm text-left">
+          <thead class="bg-gray-50 border-b">
+            <tr>
+              <!--th class="px-4 py-3 font-medium text-gray-700">Code</th-->
+              <th class="px-4 py-3 font-medium text-gray-700">Nom & Prénom</th>
+               @if(!filiereId){
+              <th class="px-4 py-3 font-medium text-gray-700">Email</th>
+              <th class="px-4 py-3 font-medium text-gray-700">Rôle</th>
+              <th class="px-4 py-3 font-medium text-gray-700 text-center">Actions</th>}
+            </tr>
+          </thead>
+          <tbody class="divide-y">
+            @for (user of filteredUsers$ | async; track user.id || user.email) {
+          <tr>
+              <!--td class="px-4 py-3">{{ user.code }}</td-->
+              <td class="px-4 py-3">{{ user.prenom }}.{{ user.nom }}</td>
+               @if(!filiereId){
+              <td class="px-4 py-3 font-mono text-sm">{{ user.email }}</td>
+              <td class="px-4 py-3">
+                <span class="px-2.5 py-1 rounded-full text-xs font-medium"
+                      [class.bg-blue-100]="user.role === 'ETUDIANT'"
+                      [class.text-blue-700]="user.role === 'ETUDIANT'"
+                      [class.bg-purple-100]="user.role === 'FORMATEUR'"
+                      [class.text-purple-700]="user.role === 'FORMATEUR'">
+                  {{ user.role }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-center">
+                <button (click)="editUser(user)" 
+                          class="text-blue-600 hover:text-blue-800 p-2">
+                    <lucide-icon [img]="editIcon" class="w-5 h-5"></lucide-icon>
+                  </button>
+                  <button (click)="resetPassword(user)" 
+                          class="text-amber-600 hover:text-amber-800 p-2">
+                    <lucide-icon [img]="resetPassIcon" class="w-5 h-5"></lucide-icon>
+                  </button>
+                  <button (click)="deleteUser(user)" 
+                          class="text-red-600 hover:text-red-800 p-2">
+                    <lucide-icon [img]="deleteIcon" class="w-5 h-5"></lucide-icon>
+                  </button>
+              </td>
+            } @else {
+              <td class="px-4 py-3 font-mono text-sm">{{ user.code }}</td>
+              <td class="px-4 py-3 font-mono text-sm">{{ user.dateEntree }}</td>
+            }
+            </tr>}
+          </tbody>
+        </table>}
+        @else {
+          <h2 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2 flex items-center gap-2">
   <lucide-icon [img]="usersIcon" class="w-5 h-5"></lucide-icon>
   Étudiants
 </h2>
 <input 
   type="text" 
   placeholder="Rechercher..." 
-  [(ngModel)]="searchItem"
+  [(ngModel)]="searchTerm"
   (input)="search()"
   class="px-3 py-1 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-40"
 >
-@if (filteredUsers$ | async; as users) {
+@if (filteredEts$ | async; as users) {
 <p class="text-sm text-gray-500 mb-4">{{ users.length }} étudiants</p>
   @if (users.length === 0) {
     <p class="text-gray-500 text-center py-4">Aucun étudiant</p>
@@ -20,4 +104,28 @@
         }
     </div>
   }
+}
+        }
+</div>
+
+
+@if (showModal) {
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-xl shadow-lg max-w-md w-full mx-4">
+    <h3 class="text-lg font-bold mb-4">Utilisateur créé</h3>
+    <p class="text-gray-600 mb-2">Adresse email généré :</p>
+    <div class="bg-gray-100 p-3 rounded-lg font-mono text-center text-lg select-all">
+      {{ generatedEmail }}
+    </div>
+    <p class="text-gray-600 mb-2">Mot de passe généré :</p>
+    <div class="bg-gray-100 p-3 rounded-lg font-mono text-center text-lg select-all">
+      {{ generatedPassword }}
+    </div>
+    <p class="text-sm text-red-500 mt-2">Notez ce mot de passe, il ne sera plus visible.</p>
+    <button (click)="closeModal()"
+      class="w-full mt-4 bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition">
+      Fermer
+    </button>
+  </div>
+</div>
 }
