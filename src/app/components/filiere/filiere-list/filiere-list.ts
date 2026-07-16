@@ -6,6 +6,8 @@ import { AsyncPipe } from '@angular/common';
 import { FiliereComponent } from '../filiere/filiere';
 import { BookOpen, LucideAngularModule, Plus } from "lucide-angular";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SuperFiliere } from '../../../models/super-filiere';
+import { SuperFiliereService } from '../../../services/super-filiere';
 
 @Component({
   selector: 'app-filiere-list',
@@ -21,46 +23,62 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 })
 export class FiliereList implements OnInit {
   
-  readonly plusIcon = Plus 
+  readonly plusIcon = Plus; 
 
-  bookOpenIcon = BookOpen
+  bookOpenIcon = BookOpen;
 
-  private cdr = inject(ChangeDetectorRef)
+  private cdr = inject(ChangeDetectorRef);
 
-  private builder = inject(FormBuilder)
+  private builder = inject(FormBuilder);
 
-  private service = inject(FiliereService)
+  private service = inject(FiliereService);
 
-  filieres$!: Observable<Filiere[]>
+  private superFiliereService = inject(SuperFiliereService);
+
+  filieres$!: Observable<Filiere[]>;
+  
+  newFiliere$!: Observable<Filiere>;
+
+  superFilieres$!: Observable<SuperFiliere[]>;
 
   filteredFilieres$!: Observable<Filiere[]>;
 
-  modal = false
+  modal = false;
 
-  searchItem = ''
+  searchItem = '';
 
   selectedFiliere: Filiere | null = null;
 
-  @Input() editable = false
+  @Input() editable = false;
 
   filiereForm = this.builder.group({
     nom: ['', Validators.required],
     description: ['', Validators.required],
+    superFiliereId: [ 1,Validators.required]
   });
 
-
   ngOnInit(): void {
+    this.load();
+  }
+
+  load(){
     this.filieres$ = this.service.getFilieres();
     this.filteredFilieres$ = this.filieres$
+    this.superFilieres$=this.superFiliereService.getSuperFilieres();
   }
 
   onSubmitForm() {
+   
     const filiere: Filiere = {
       id: this.selectedFiliere?.id,
       nom: this.filiereForm.value.nom!,
       description: this.filiereForm.value.description!,
-    } as Filiere;
-
+      superFiliereId : this.filiereForm.value.superFiliereId
+    } as unknown as Filiere;
+    
+    console.log("filiere :" + filiere);
+    
+    console.log(JSON.stringify(filiere));
     const request = filiere.id 
     ? this.service.updateFiliere(filiere) 
     : this.service.addFiliere(filiere);

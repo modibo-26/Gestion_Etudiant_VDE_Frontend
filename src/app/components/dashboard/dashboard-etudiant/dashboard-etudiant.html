@@ -8,7 +8,8 @@
         <div>
           <h1 class="text-xl font-bold">{{ user.prenom }} {{ user.nom }}</h1>
           <p class="text-gray-600">{{ user.email ?? 'Pas d\'email' }}</p>
-          <p class="text-sm text-blue-600">{{ user.filiere?.nom ?? 'Aucune filière' }}</p>
+          @if (userFiliere$ | async; as userFiliere){ <p class="text-sm text-blue-600">{{ userFiliere.nom }}</p>
+        } @else {<p class="text-sm text-blue-600">{{ 'Aucune filière' }}</p>}
           <p class="text-sm text-gray-400">{{ user.code ?? 'Pas de code' }}
         </div>
       </div>

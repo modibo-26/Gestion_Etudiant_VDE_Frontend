@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { ModuleValidation } from '../models/module-validation';
+import { CreatedUser } from '../models/created-user';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +35,7 @@ export class UserService {
   }
 
   createUser(user: User) {
-    return this.http.post<User>(`${this.apiUrl}/create`, user)
+    return this.http.post<CreatedUser>(`${this.apiUrl}/create`, user)
   }
 
   assignFiliere(userId: number, filiereId: number): Observable<void> {
@@ -45,4 +46,16 @@ export class UserService {
     return this.http.get<User[]>(`${this.apiUrl}`);
   }
   
+  deleteUser(userId: number): Observable<void>{
+    return this.http.delete<void>(`${this.apiUrl}/${userId}`)
+  }
+
+  resetPassword(userId: number): Observable<CreatedUser>{
+    return this.http.get<CreatedUser>(`${this.apiUrl}/resetPassword/${userId}`)
+
+  }
+
+  getEtudiantsBySuperFiliere(superFiliereId : number): Observable <User[]>{
+    return this.http.get<User[]>(`${this.apiUrl}/superFiliere/${superFiliereId}`)
+  }
 }

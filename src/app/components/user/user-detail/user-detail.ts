@@ -9,6 +9,7 @@ import { FiliereService } from '../../../services/filiere';
 import { Filiere } from '../../../models/filiere';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidationBoard } from "../../validation-board/validation-board";
+import { SuperFiliereService } from '../../../services/super-filiere';
 
 @Component({
   selector: 'app-user-detail',
@@ -18,38 +19,54 @@ import { ValidationBoard } from "../../validation-board/validation-board";
     FormsModule,
     ValidationBoard,
     DecimalPipe,
-],
+  ],
   templateUrl: './user-detail.html',
   styleUrl: './user-detail.scss',
 })
 export class UserDetail implements OnInit {
 
-  user$!: Observable<User>
+  user$!: Observable<User>;
 
-  selectedFiliereId!: number
+  selectedFiliereId!: number;
 
-  filieres$!: Observable<Filiere[]>
+  userFiliereId!: number;
 
-  private route = inject(ActivatedRoute)
+  userFiliere$!: Observable<Filiere>;
 
-  private service = inject(UserService)
+  filieres$!: Observable<Filiere[]>;
 
-  private filiereService = inject(FiliereService)
+  private route = inject(ActivatedRoute);
 
-  private cdr = inject(ChangeDetectorRef)
+  private service = inject(UserService);
+
+  private filiereService = inject(FiliereService);
+
+  private superFiliereService = inject(SuperFiliereService);
+
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.user$ = this.getUser()
-    this.filieres$ = this.getFilieres()
-  }
+    this.getUser();
 
-  getFilieres() {
-    return this.filieres$ = this.filiereService.getFilieres();
   }
 
   getUser() {
     const userId = +this.route.snapshot.params['id']
-    return this.user$ = this.service.getUserById(userId)
+    this.user$ = this.service.getUserById(userId);
+    this.user$.subscribe((user) => {
+      console.log(user.superFiliereId);
+      if (user.filiereId != null)
+        this.userFiliere$ = this.filiereService.getFiliereById(user.filiereId);
+      else if (user.superFiliereId) {
+        this.filieres$ = this.superFiliereService.getFilieres(user.superFiliereId);
+        this.filieres$.subscribe(filieres => {
+          console.log(filieres);
+        });
+      }
+    });
+
+
+
   }
 
   onAssignFiliere(userId: number, filiereId: number) {

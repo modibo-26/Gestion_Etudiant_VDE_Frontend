@@ -1,6 +1,7 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '../../../models/user';
+import { RefreshCcw, SquarePen, Trash2 } from 'lucide-angular';
 
 @Component({
   selector: 'app-user',
@@ -10,7 +11,13 @@ import { User } from '../../../models/user';
 })
 export class UserCompenent {
   @Input() user!: User
+  @Output() onEdit = new EventEmitter<User>();
+  @Output() onDelete = new EventEmitter<User>();
+  @Output() onResetPassword = new EventEmitter<User>();
 
+  @Input() editIcon = SquarePen;
+  @Input() deleteIcon = Trash2;
+  @Input() resetPassIcon = RefreshCcw;
   private router = inject(Router)
 
   onViewUser() {
