@@ -70,7 +70,7 @@ export class UserForm implements OnInit{
       error: (err) => console.error(err)
     });
 
-    
+
   }
 
   openModal() {
